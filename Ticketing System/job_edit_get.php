@@ -9,75 +9,70 @@ $sLocationDropdown = "";
 $AgentID = $_SESSION['agentID'];
 if ($_SERVER['REQUEST_METHOD'] == 'POST')
 {
-    $sClientID = checkValue('client_select', "");
-    $sClientFirst_name = checkValue('client_first_name', "");
-    $sClientLast_Name = checkValue('client_last_name', "");
-    $sClientEmail = checkValue('client_email', "");
-    $sClientPhone = checkValue('client_phone_number', "");
-    $ExistingClient = checkValue('ExistingClient', "");
+    $sJobID = checkValue('JobID', "");
     $sLocation = checkValue('location', "");
     $sLocationDropdown = checkValue('location_dropdown', "");
     $Existinglocation = checkValue('locationtoggle', "");
     $sType = checkValue('type', "");
     $sPriority = checkValue('priority', "");
+    $sStatus = checkValue('Status', "");
     $sTitle = checkValue('title', "");
     $sDescription = checkValue('description', "");
+    $aAssignAgents = checkValue('Agents_to_Assign', "");
+    $aUnAssignAgents = checkValue('Agents_to_Unassign', "");
 
 }
 elseif ($_SERVER['REQUEST_METHOD'] == 'GET')
 {
-    $sClientID = checkValue('client_select', "");
-    $sClientFirst_name = checkValue('client_first_name', "");
-    $sClientLast_Name = checkValue('client_last_name', "");
-    $sClientEmail = checkValue('client_email', "");
-    $sClientPhone = checkValue('client_phone_number', "");
-    $ExistingClient = checkValue('ExistingClient', "");
+    $sJobID = checkValue('JobID', "");
     $sLocation = checkValue('location', "");
     $sLocationDropdown = checkValue('location_dropdown', "");
     $Existinglocation = checkValue('locationtoggle', "");
+    $sStatus = checkValue('Status', "");
     $sType = checkValue('type', "");
     $sPriority = checkValue('priority', "");
     $sTitle = checkValue('title', "");
     $sDescription = checkValue('description', "");
+    $aAssignAgents = checkValue('Agents_to_Assign', "");
+    $aUnAssignAgents = checkValue('Agents_to_Unassign', "");
+
 }
-if ($ExistingClient == "" OR $ExistingClient == NULL)
+if ($aAssignAgents != Null OR $aAssignAgents != "")
 {
-    $sSQL = <<<SQL
-        insert into tbl_client 
-          (fld_first_name, fld_last_name, fld_phone_number, fld_email_address) 
-        values 
-          (:Client_First_Name,:Client_Last_Name, :Client_Phone_Number, :Client_Email_Address)
+    foreach($aAssignAgents as $agent) {
+        $sSQL = <<<SQL
+            insert into tbl_agent_bridge (fld_fk_id_agent, fld_fk_id_job) values ($agent,$sJobID);    
 SQL;
-    $Array = array(":Client_First_Name" => $sClientFirst_name,
-                    ":Client_Last_Name" => $sClientLast_Name,
-                    ":Client_Phone_Number" => $sClientPhone,
-                    ":Client_Email_Address" => $sClientEmail);
-    $sClientID = $oDBConnection->commitSQL($sSQL, $Array);
+        $oDBConnection->commitSQL($sSQL, Null);
+    }
+    echo "Agent(s) Assigned";
+
+}
+if ($aUnAssignAgents != Null OR $aUnAssignAgents != "")
+{
+    foreach($aUnAssignAgents as $agent) {
+        $sSQL = <<<SQL
+            delete from tbl_agent_bridge where fld_fk_id_agent = $agent AND fld_fk_id_job = $sJobID
+SQL;
+        $oDBConnection->commitSQL($sSQL, Null);
+    }
+    echo " - Agent(s) Unnasigned";
 }
 if (!$Existinglocation == "")
 {
     $sLocation = $sLocationDropdown;
 }
 $sSQL = <<<SQL
-      insert into tbl_job 
-        (fld_start_date, fld_title, fld_description, fld_location, fld_fk_id_client, fld_fk_id_priority, fld_fk_id_job_type, fld_fk_id_status, fld_fk_id_agent) 
-      values 
-        (now(), :Title, :Description, :Location,'$sClientID','$sPriority', '$sType', '1','$AgentID')
+      Update tbl_job 
+      Set 
+        fld_location = :Location, 
+        fld_fk_id_priority = '$sPriority', 
+        fld_fk_id_job_type = '$sType', 
+        fld_fk_id_status = '$sStatus'
+      WHERE 
+        fld_id_job = $sJobID
 SQL;
-$Array = array(":Title" => $sTitle,
-                ":Description" => $sDescription,
-                ":Location" => $sLocation);
-$sJobID = $oDBConnection->commitSQL($sSQL, $Array);
-if (!$attachmentID == "")
-{
-    $sSQL = <<<SQL
-            insert into tbl_job_attachment_bridge 
-              (fld_fk_id_job, fld_fk_id_attachment) 
-            values 
-              ('$sJobID', $attachmentID)
-SQL;
-    $Array = null;
-    $oDBConnection->commitSQL($sSQL, $Array);
-}
-Echo "Your Job has been submitted. Your job number is: $sJobID";
-header("refresh:3;url=dashboard.php");
+$Array = array(":Location" => $sLocation);
+$oDBConnection->commitSQL($sSQL, $Array);
+Echo " - Your Job has been updated, redirecting you now";
+header("refresh:3;url=job_info_redirect.php?JobID=$sJobID");

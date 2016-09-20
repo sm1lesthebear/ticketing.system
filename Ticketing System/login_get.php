@@ -17,11 +17,11 @@ $oLoginTest = new cLogin_Test();
 $oLoginTest->setVar($sUsername,$sPassword);
 $bLoginTry = $oLoginTest->login_test();
 if ($bLoginTry == true) {
-    echo "Login Successful";
+    echo "Login Successful, redirecting you now";
     header("refresh:3;url=dashboard.php");
 }
 else
 {
-    echo "Login Unsuccessful";
+    echo "Login Unsuccessful, redirecting you now";
     header("refresh:3;url=index.php");
 }
