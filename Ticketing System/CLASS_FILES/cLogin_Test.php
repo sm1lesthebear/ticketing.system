@@ -32,11 +32,10 @@ class cLogin_Test {
         $dbConnection = new cDatabase_Connection();
         try
         {
-            $sql = 'select fld_password_salt from tbl_agent where fld_username = ' . $this->username . '';
+            $sql = "select fld_password_salt from tbl_agent where fld_username = '$this->username'";
             foreach ($dbConnection->oConn()->query($sql) as $row)
             {
                 $salt = $row['fld_password_salt'];
-
             }
             $sql = 'select fld_id_agent from tbl_agent where fld_username = "'.$this->username .'" AND fld_password = "' . hashPassword($this->password, $salt) . '"';
             foreach ($dbConnection->oConn()->query($sql) as $row)

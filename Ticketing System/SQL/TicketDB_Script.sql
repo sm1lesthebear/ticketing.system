@@ -26,18 +26,18 @@ insert into tbl_agent_bridge (fld_fk_id_agent, fld_fk_id_job) values ('2','37');
 
 
 insert into tbl_agent 
-  (fld_first_name, fld_last_name, fld_email_address, fld_username, fld_password, fld_password_salt,fld_fk_id_privilige) 
+  (fld_first_name, fld_last_name, fld_email_address, fld_username, fld_password, fld_password_salt, fld_fk_id_privilige) 
 values 
-  ('Agent1','Agent1','Ramin.majidi@gmail.com','1','$2y$12$lDpKTOvxCTjhU9HsEHW03e9fTeh4b/ukUm5lyy20mW1vO0tSOu0A6','lDpKTOvxCTjhU9HsEHW03h', '1');
+  ('Admin','Admin','Ded@ded.Ded','Admin','$2y$12$UVoj0opWrxwx91xlfplhYet3NyhfuCJY/h3NR6/ey/VwmNyTNxyRe','UVoj0opWrxwx91xlfplhYq', '1');
 insert into tbl_agent 
   (fld_first_name, fld_last_name, fld_email_address, fld_username, fld_password, fld_password_salt,fld_fk_id_privilige) 
 values 
-  ('Agent2','Agent2','Brock2109@gmail.com','2','$2y$12$lDpKTOvxCTjhU9HsEHW03e9fTeh4b/ukUm5lyy20mW1vO0tSOu0A6','lDpKTOvxCTjhU9HsEHW03h', '2');
+  ('Agent','Agent','Ded@ded.Ded','Agent1','$2y$12$UVoj0opWrxwx91xlfplhYet3NyhfuCJY/h3NR6/ey/VwmNyTNxyRe','UVoj0opWrxwx91xlfplhYq', '2');
 insert into tbl_agent 
   (fld_first_name, fld_last_name, fld_email_address, fld_username, fld_password, fld_password_salt,fld_fk_id_privilige) 
 values 
-  ('Agent3','Agent3','Ramin.majidi@gmail.com','1','$2y$12$lDpKTOvxCTjhU9HsEHW03e9fTeh4b/ukUm5lyy20mW1vO0tSOu0A6','lDpKTOvxCTjhU9HsEHW03h', '1');
+  ('Agent','Agent','Ded@ded.Ded','Agent2','$2y$12$UVoj0opWrxwx91xlfplhYet3NyhfuCJY/h3NR6/ey/VwmNyTNxyRe','UVoj0opWrxwx91xlfplhYq', '2');
 insert into tbl_agent 
   (fld_first_name, fld_last_name, fld_email_address, fld_username, fld_password, fld_password_salt,fld_fk_id_privilige) 
 values 
-  ('Agent4','Agent4','Brock2109@gmail.com','2','$2y$12$lDpKTOvxCTjhU9HsEHW03e9fTeh4b/ukUm5lyy20mW1vO0tSOu0A6','lDpKTOvxCTjhU9HsEHW03h', '2');
+  ('Agent','Agent','Ded@ded.Ded','Agent3','$2y$12$UVoj0opWrxwx91xlfplhYet3NyhfuCJY/h3NR6/ey/VwmNyTNxyRe','UVoj0opWrxwx91xlfplhYq', '2');
