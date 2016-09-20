@@ -52,7 +52,7 @@ if ($sPriviligeID == 1)
                 select J.fld_id_job, J.fld_start_date, J.fld_title, J.fld_description, P.fld_priority 
                 from tbl_job J, tbl_priority P
                 where J.fld_fk_id_priority = P.fld_id_priority 
-                and J.fld_fk_id_status = 1
+                and (J.fld_fk_id_status != 2 OR J.fld_fk_id_status != 3)
                 order by P.fld_id_priority DESC
                 limit 15 offset $sLimitVal
 SQL;
@@ -64,13 +64,12 @@ else
                 select fld_id_job, fld_start_date, fld_title, fld_description, P.fld_priority 
                 from tbl_job J, tbl_priority P, tbl_agent_bridge AB 
                 where J.fld_fk_id_priority = P.fld_id_priority 
-                and J.fld_fk_id_status = 1
+                and (J.fld_fk_id_status != 2 OR J.fld_fk_id_status != 3)
                 and J.fld_id_job = AB.fld_fk_id_job
                 and AB.fld_fk_id_agent = $sAgentID
                 order by P.fld_id_priority DESC
                 limit 15 offset $sLimitVal
 SQL;
-
 }
 foreach ($oDBConnection->getfromDB($sSQL) as $row)
 {
@@ -82,19 +81,6 @@ foreach ($oDBConnection->getfromDB($sSQL) as $row)
         $sDate = $row['fld_start_date'];
 
         $sJobHtml .= <<<HTML
-<!--
-//                <div class="col-sm-10 col-sm-offset-1">
-//                        <a href="job_info_redirect.php?JobID=$sJobID" class="list-group-item">
-//                            <span class="row">
-//                                <span class="col-sm-3">$sTitle</span>
-//                                <span class="col-sm-5">$sDescription</span>
-//                                <span class="col-sm-2">$sPriority</span>
-//                                <span class="col-sm-2">$sDate</span>
-//                            </span>
-//                        </a>
-//                </div>
--->
-
                 <tr style="cursor:pointer" onclick="location.href='job_info_redirect.php?JobID=$sJobID'">
                     <td class="col-sm-3">$sTitle</td>
                     <td class="col-sm-5">$sDescription</td>
@@ -106,10 +92,6 @@ HTML;
 if (((($count + 14) - $sOffset) < 0)){
         header('location:dashboard.php');
 }
-
-
-// This page is going to be reworked to fit with http://getbootstrap.com/css/#tables-condensed which is a much nicer format
-// Honestly had I known about it I would have saved a tonne of time
 
 $html =<<<HTML
 <div id="container">

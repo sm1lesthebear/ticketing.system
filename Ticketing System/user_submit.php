@@ -39,7 +39,5 @@ $Array = array(":First_Name" => $sFirst_name,
                 ":Username" => $sUsername,
                 ":Password" => $hash,
                 ":Password_Salt" => $salt);
-echo $sSQL;
 $oDBConnection->commitSQL($sSQL, $Array);
-die;
 header("location:dashboard.php");
