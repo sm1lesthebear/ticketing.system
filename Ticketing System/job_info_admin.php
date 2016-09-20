@@ -75,8 +75,8 @@ $sPriorityDropdown = getDropdown('select * from tbl_priority', 'fld_id_priority'
 $sGivenPriority = getDropdown("select * from tbl_priority where fld_id_priority = $sPriority_ID", 'fld_id_priority', 'fld_priority');
 $sStatusDropdown = getDropdown("select * from tbl_status", 'fld_id_status', 'fld_status');
 $sGivenStatus = getDropdown("select S.fld_id_status, S.fld_status from tbl_status S, tbl_job J where J.fld_fk_id_status = S.fld_id_status and J.fld_id_job = $JobID", 'fld_id_status', 'fld_status');
-$sUnnassignedAgents = getDropdown("select A.fld_id_agent, CONCAT(A.fld_first_name, ' ',A.fld_last_name) as Agent_Name from tbl_agent A left join tbl_agent_bridge AB on A.fld_id_agent = AB.fld_fk_id_agent where A.fld_id_agent not in (select fld_fk_id_agent from tbl_agent_bridge AB where AB.fld_fk_id_job = $JobID)", 'fld_id_agent', 'Agent_Name');
-$sAssignedAgents = getDropdown("select A.fld_id_agent, CONCAT(A.fld_first_name, ' ',A.fld_last_name) as Agent_Name from tbl_agent A left join tbl_agent_bridge AB on A.fld_id_agent = AB.fld_fk_id_agent where AB.fld_fk_id_job = $JobID",'fld_id_agent','Agent_Name');
+$sUnnassignedAgents = getDropdown("select DISTINCT A.fld_id_agent, CONCAT(A.fld_first_name, ' ',A.fld_last_name) as Agent_Name from tbl_agent A left join tbl_agent_bridge AB on A.fld_id_agent = AB.fld_fk_id_agent where A.fld_id_agent not in (select fld_fk_id_agent from tbl_agent_bridge AB where AB.fld_fk_id_job = $JobID)", 'fld_id_agent', 'Agent_Name');
+$sAssignedAgents = getDropdown("select DISTINCT A.fld_id_agent, CONCAT(A.fld_first_name, ' ',A.fld_last_name) as Agent_Name from tbl_agent A left join tbl_agent_bridge AB on A.fld_id_agent = AB.fld_fk_id_agent where AB.fld_fk_id_job = $JobID",'fld_id_agent','Agent_Name');
 $html =<<<HTML
 <div class="container">
     <div class="row">

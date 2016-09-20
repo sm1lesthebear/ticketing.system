@@ -57,6 +57,7 @@ if ($sPriviligeID == 1)
                 order by P.fld_id_priority DESC
                 limit 15 offset $sLimitVal
 SQL;
+
 }
 else
 {
@@ -71,6 +72,7 @@ else
                 order by P.fld_id_priority DESC
                 limit 15 offset $sLimitVal
 SQL;
+    echo $sSQL;
 }
 foreach ($oDBConnection->getfromDB($sSQL) as $row)
 {
@@ -93,10 +95,6 @@ HTML;
 if (((($count + 14) - $sOffset) < 0)){
         header('location:dashboard_closed.php');
 }
-
-
-// This page is going to be reworked to fit with http://getbootstrap.com/css/#tables-condensed which is a much nicer format
-// Honestly had I known about it I would have saved a tonne of time
 
 $html =<<<HTML
 <div id="container">
