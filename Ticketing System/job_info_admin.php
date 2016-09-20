@@ -35,22 +35,6 @@ foreach ($oDBConnection->getfromDB($sSQL) as $row)
     $sAgent_ID = $row['fld_fk_id_agent'];
     $sPriority_ID = $row['fld_fk_id_priority'];
 }
-$sSQL = "select fld_id_client, fld_first_name, fld_last_name, fld_phone_number, fld_email_address from tbl_client ";
-foreach ($oDBConnection->getfromDB($sSQL) as $row){
-    $sClient_First_Name = $row['fld_first_name'];
-    $sClient_Second_Name = $row['fld_last_name'];
-    $sOptionTitle = $row['fld_first_name'] . ' ' . $row['fld_last_name'];
-    $sOptionID = $row['fld_id_client'];
-    $sEmail = $row['fld_phone_number'];
-    $sPhonenumber = $row['fld_email_address'];
-    $sClientDropdown .= <<<HTML
-                                <option value="$sOptionID">
-                                    <span class="col-sm-4">$sOptionTitle</span>
-                                    <span class="col-sm-3">$sEmail</span>
-                                    <span class="col-sm-3">$sPhonenumber</span>
-                                </option>
-HTML;
-}
 $sSQL = "select fld_id_client, fld_first_name, fld_last_name, fld_phone_number, fld_email_address from tbl_client where fld_id_client = $sClient_ID ";
 foreach ($oDBConnection->getfromDB($sSQL) as $row){
     $sClient_First_Name = $row['fld_first_name'];
@@ -89,7 +73,8 @@ $sTicketType = getDropdown('select * from tbl_job_type','fld_id_job_type','fld_t
 $sGivenType = getDropdown("select * from tbl_job_type where fld_id_job_type = $sJob_Type_ID",'fld_id_job_type','fld_type');
 $sPriorityDropdown = getDropdown('select * from tbl_priority', 'fld_id_priority', 'fld_priority');
 $sGivenPriority = getDropdown("select * from tbl_priority where fld_id_priority = $sPriority_ID", 'fld_id_priority', 'fld_priority');
-$sGivenStatus = getDropdown("select * from tbl_status", 'fld_id_status', 'fld_status');
+$sStatusDropdown = getDropdown("select * from tbl_status", 'fld_id_status', 'fld_status');
+$sGivenStatus = getDropdown("select S.fld_id_status, S.fld_status from tbl_status S, tbl_job J where J.fld_fk_id_status = S.fld_id_status and J.fld_id_job = $JobID", 'fld_id_status', 'fld_status');
 $sUnnassignedAgents = getDropdown("select A.fld_id_agent, CONCAT(A.fld_first_name, ' ',A.fld_last_name) as Agent_Name from tbl_agent A left join tbl_agent_bridge AB on A.fld_id_agent = AB.fld_fk_id_agent where A.fld_id_agent not in (select fld_fk_id_agent from tbl_agent_bridge AB where AB.fld_fk_id_job = $JobID)", 'fld_id_agent', 'Agent_Name');
 $sAssignedAgents = getDropdown("select A.fld_id_agent, CONCAT(A.fld_first_name, ' ',A.fld_last_name) as Agent_Name from tbl_agent A left join tbl_agent_bridge AB on A.fld_id_agent = AB.fld_fk_id_agent where AB.fld_fk_id_job = $JobID",'fld_id_agent','Agent_Name');
 $html =<<<HTML
@@ -104,38 +89,37 @@ $html =<<<HTML
             <a href="Comments.php?JobID=$JobID" class="form-control btn btn-default">View Agent Comments</a>
         </div>
     </div>
-    <form action="ticket_get.php" name="ticket_form" enctype="multipart/form-data" method="post" onsubmit="return ticketFormValidate()" class="form-horizontal" role="form">
+    <form action="job_edit_get.php?JobID=$JobID" name="ticket_form" enctype="multipart/form-data" method="post" onsubmit="return ticketFormValidate()" class="form-horizontal" role="form">
         <div class="form-group" id="client_select" style="display:none;">
             <label class="col-sm-3" for="client_select">Select a client :</label>
             <div class="col-sm-9">
-                <select class="form-control" id="client_select" name="client_select">
+                <select class="form-control" disabled id="client_select" name="client_select">
                     $sGiven_ClientDropdown
-                    $sClientDropdown
                 </select>
             </div>
         </div>
         <div class="form-group" id="client_first_name">
             <label class="col-sm-3" for="client_first_name">Client First Name :</label>
             <div class="col-sm-9">
-                <input maxlength="30" type="text"  class="form-control" name="client_first_name" id="client_first_name" value="$sClient_First_Name" Placeholder="Enter the clients name...">
+                <input maxlength="30" type="text" disabled class="form-control" name="client_first_name" id="client_first_name" value="$sClient_First_Name" Placeholder="Enter the clients name...">
             </div>
         </div>
         <div class="form-group" id="client_last_name">
             <label class="col-sm-3" for="client_last_name">Client Surname :</label>
             <div class="col-sm-9">
-                <input maxlength="30" type="text"  class="form-control" name="client_last_name" id="client_last_name" value="$sClient_Second_Name" Placeholder="Enter the clients surname..">
+                <input maxlength="30" type="text" disabled class="form-control" name="client_last_name" id="client_last_name" value="$sClient_Second_Name" Placeholder="Enter the clients surname..">
             </div>
         </div>
         <div class="form-group" id="client_email">
             <label class="col-sm-3" for="client_email">Client Email :</label>
             <div class="col-sm-9">
-                <input maxlength="30" type="email"  class="form-control" name="client_email" id="client_email" value="$sEmail" Placeholder="Enter the clients email...">
+                <input maxlength="30" type="email" disabled class="form-control" name="client_email" id="client_email" value="$sEmail" Placeholder="Enter the clients email...">
             </div>
         </div>
         <div class="form-group" id="client_phone_number">
             <label class="col-sm-3" for="client_phone_number">Client Phone Number :</label>
             <div class="col-sm-9">
-                <input maxlength="30" type="text"  class="form-control" name="client_phone_number" id="client_phone_number" value="$sPhonenumber" Placeholder="Enter the clients phone number...">
+                <input maxlength="30" type="text" disabled class="form-control" name="client_phone_number" id="client_phone_number" value="$sPhonenumber" Placeholder="Enter the clients phone number...">
             </div>
         </div>
         <div class="checkbox-inline col-sm-4 col-sm-offset-6">
@@ -163,8 +147,9 @@ $html =<<<HTML
         <div class="form-group">
             <label class="col-sm-3" for="Status">Ticket Status :</label>
             <div class="col-sm-9">
-                <select class="form-control"  name="Status">
+                <select class="form-control" name="Status">
                     $sGivenStatus
+                    $sStatusDropdown
                 </select>
             </div>
         </div>
@@ -245,7 +230,7 @@ $html =<<<HTML
                 <input  type="submit" name="submit" class="form-control btn btn-default">
             </div>
             <div class="col-sm-2 col-sm-offset-9 margin-top">
-                <a href="ticket_submit.php" class="form-control btn btn-default">Clear</a>
+                <a href="job_edit_get.php?JobId=$JobID" class="form-control btn btn-default">Clear</a>
             </div>
             <div class="col-sm-2 col-sm-offset-9 margin-top">
                 <a href="dashboard.php" class="form-control btn btn-default">Home</a>

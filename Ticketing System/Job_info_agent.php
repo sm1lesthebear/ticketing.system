@@ -74,7 +74,9 @@ $sTicketType = getDropdown('select * from tbl_job_type','fld_id_job_type','fld_t
 $sGivenType = getDropdown("select * from tbl_job_type where fld_id_job_type = $sJob_Type_ID",'fld_id_job_type','fld_type');
 $sPriorityDropdown = getDropdown('select * from tbl_priority', 'fld_id_priority', 'fld_priority');
 $sGivenPriority = getDropdown("select * from tbl_priority where fld_id_priority = $sPriority_ID", 'fld_id_priority', 'fld_priority');
-$sGivenStatus = getDropdown("select * from tbl_status", 'fld_id_status', 'fld_status');
+$sStatusDropdown = getDropdown("select * from tbl_status", 'fld_id_status', 'fld_status');
+$sGivenStatus = getDropdown("select S.fld_id_status, S.fld_status from tbl_status S, tbl_job J where J.fld_fk_id_status = S.fld_id_status and J.fld_id_job = $JobID", 'fld_id_status', 'fld_status');
+
 $html =<<<HTML
 <div class="container">
     <div class="row">
@@ -87,7 +89,7 @@ $html =<<<HTML
             <a href="Comments.php?JobID=$JobID" class="form-control btn btn-default">View Agent Comments</a>
         </div>
     </div>
-    <form action="ticket_get.php" name="ticket_form" enctype="multipart/form-data" method="post" onsubmit="return ticketFormValidate()" class="form-horizontal" role="form">
+    <form action="job_edit_get.php?JobID=$JobID" name="ticket_form" enctype="multipart/form-data" method="post" onsubmit="return ticketFormValidate()" class="form-horizontal" role="form">
         <div class="form-group" id="client_select" style="display:none;">
             <label class="col-sm-3" for="client_select">Select a client :</label>
             <div class="col-sm-9">
@@ -147,6 +149,7 @@ $html =<<<HTML
             <div class="col-sm-9">
                 <select class="form-control"  name="Status">
                     $sGivenStatus
+                    $sStatusDropdown
                 </select>
             </div>
         </div>
@@ -207,10 +210,10 @@ $html =<<<HTML
                 <a href="Attachment.php?AttachmentID=$AttachmentID" target="_blank" class="form-control btn btn-default">Attachment</a>
             </div>
             <div class="col-sm-2 col-sm-offset-4 margin-top">
-                <input  type="submit" name="submit" class="form-control btn btn-default">
+                <input type="submit" name="submit" class="form-control btn btn-default">
             </div>
             <div class="col-sm-2 col-sm-offset-9 margin-top">
-                <a href="ticket_submit.php" class="form-control btn btn-default">Clear</a>
+                <a href="job_edit_get.php?JobID=$JobID" class="form-control btn btn-default">Clear</a>
             </div>
             <div class="col-sm-2 col-sm-offset-9 margin-top">
                 <a href="dashboard.php" class="form-control btn btn-default">Home</a>

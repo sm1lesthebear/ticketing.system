@@ -13,6 +13,8 @@ $sOffset = 0;
 $sLimitVal = 0;
 $count = 0;
 $sPriviligeID = "";
+$sAgentFirstName = "";
+$sAgentLastName = "";
 if ($_SERVER['REQUEST_METHOD'] == 'POST')
 {
         $sOffset = checkValue('offset', 0);
@@ -35,25 +37,25 @@ $sSQL = <<<SQL
                 where A.fld_fk_id_privilige = P.fld_id_privilige 
                 and fld_id_agent = $sAgentID
 SQL;
+
 foreach ($oDBConnection->getfromDB($sSQL) as $row)
 {
         $sAgentFirstName = $row['fld_first_name'];
         $sAgentLastName = $row['fld_last_name'];
         $sPriviligeID = $row['fld_id_privilige'];
 }
-
 $sAgentName = $sAgentFirstName . ' ' . $sAgentLastName;
 if ($sPriviligeID == 1)
 {
 
         $sSQL = <<<SQL
                 select fld_id_job, fld_start_date, fld_title, fld_description, P.fld_priority 
-                from tbl_job J, tbl_priority P,
+                from tbl_job J, tbl_priority P
                 where J.fld_fk_id_priority = P.fld_id_priority 
                 and J.fld_fk_id_status = 2 
                 or J.fld_fk_id_status = 3
                 order by P.fld_id_priority DESC
-                limit 8 offset $sLimitVal
+                limit 15 offset $sLimitVal
 SQL;
 }
 else
@@ -65,9 +67,9 @@ else
                 and J.fld_fk_id_status = 2 
                 or J.fld_fk_id_status = 3
                 and J.fld_id_job = AB.fld_fk_id_job
-                and AB.fld_id_agent_bridge = $sAgentID
+                and AB.fld_fk_id_agent = $sAgentID
                 order by P.fld_id_priority DESC
-                limit 8 offset $sLimitVal
+                limit 15 offset $sLimitVal
 SQL;
 }
 foreach ($oDBConnection->getfromDB($sSQL) as $row)
@@ -80,74 +82,85 @@ foreach ($oDBConnection->getfromDB($sSQL) as $row)
         $sDate = $row['fld_start_date'];
 
         $sJobHtml .= <<<HTML
-                    <div class="col-sm-10 col-sm-offset-1">
-                        <a href="job_info_redirect.php?JobID=$sJobID" class="list-group-item">
-                            <span class="row">
-                                <span class="col-sm-3">$sTitle</span>
-                                <span class="col-sm-5">$sDescription</span>
-                                <span class="col-sm-2">$sPriority</span>
-                                <span class="col-sm-2">$sDate</span>
-                            </span>
-                        </a>
-                    </div>
+                <tr style="cursor:pointer" onclick="location.href='job_info_redirect.php?JobID=$sJobID'">
+                    <td class="col-sm-3">$sTitle</td>
+                    <td class="col-sm-5">$sDescription</td>
+                    <td class="col-sm-2">$sPriority</td>
+                    <td class="col-sm-2">$sDate</td>
+                </tr>
 HTML;
 }
-if (((($count + 7) - $sOffset) < 0)){
+if (((($count + 14) - $sOffset) < 0)){
         header('location:dashboard_closed.php');
 }
+
+
+// This page is going to be reworked to fit with http://getbootstrap.com/css/#tables-condensed which is a much nicer format
+// Honestly had I known about it I would have saved a tonne of time
+
 $html =<<<HTML
-        <div id="container">
+<div id="container">
             <div id="margin-right-left">
-            <div class="row">
-                <h1 class="col-sm-10 col-sm-offset-2 h1-margin-bottom">Closed Jobs of Agent $sAgentName</h1>
-                <div class="list-group">
-                    $sJobHtml
-                </div>
-            </div>
-            <div class="row">
-                <div class=" margin-top">
-                    <div class="col-sm-2">
-                        <form class="form" action="dashboard_closed.php" method="post">
-                            <div class="form-group">
-                                <input type="hidden" name="curVal" value="$sLimitVal">
-                                <input type="hidden" name="offset" value="-8">
-                                <button class="form-control btn btn-default" name="previous">Previous</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="col-sm-2">
-                        <form class="form" action="ticket_submit.php" method="post">
-                            <div class="form-group">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
-                                <button class="form-control btn btn-default" name="kkk">Add Ticket</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="col-sm-4">
-                        <form class="form" action="dashboard.php" method="post">
-                            <div class="form-group">
-                                <button class="form-control btn btn-default" name="closed">See Open Tickets</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="col-sm-2">
-                        <form class="form" action="reports.php" method="post">
-                            <div class="form-group">
-                                <button class="form-control btn btn-default" name="kkk">See Reports</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="col-sm-2">
-                        <form class="form" action="dashboard_closed.php" method="post">
-                            <div class="form-group">
-                                <input type="hidden" name="curVal" value="$sLimitVal">
-                                <input type="hidden" name="offset" value="8">
-                                <button class="form-control btn btn-default" name="next">Next</button>
-                            </div>
-                        </form>
+                <div class="row">
+                    <div class="col-sm-10 col-sm-offset-1">
+                        <h1 class="h1-margin-bottom">Active Jobs of Agent $sAgentName</h1>
+                                <table class="table">
+                                <!--generated table info-->
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Description</th>
+                                    <th>Priority</th>
+                                    <th>Date</th>
+                                </tr>
+                                $sJobHtml
+                        </table>
                     </div>
                 </div>
-            </div>
+                    <div class="row">
+                        <div class=" margin-top">
+                            <div class="col-sm-2">
+                                <form class="form" action="dashboard_closed.php" method="post">
+                                    <div class="form-group">
+                                        <input type="hidden" name="curVal" value="$sLimitVal">
+                                        <input type="hidden" name="offset" value="-15">
+                                        <button class="form-control btn btn-default" name="previous">Previous</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-sm-2">
+                                <form class="form" action="ticket_submit.php" method="post">
+                                    <div class="form-group">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+                                        <button class="form-control btn btn-default" name="kkk">Add Ticket</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-sm-4">
+                                <form class="form" action="dashboard_closed.php" method="post">
+                                    <div class="form-group">
+                                        <button class="form-control btn btn-default" name="closed">See Closed Tickets</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-sm-2">
+                                <form class="form" action="reports.php" method="post">
+                                    <div class="form-group">
+                                        <button class="form-control btn btn-default" name="kkk">See Reports</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-sm-2">
+                                <form class="form" action="dashboard_closed.php" method="post">
+                                    <div class="form-group">
+                                        <input type="hidden" name="curVal" value="$sLimitVal">
+                                        <input type="hidden" name="offset" value="15">
+                                        <button class="form-control btn btn-default" name="next">Next</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
         </div>
+</div>
 HTML;
 
 echo $oPage->load_page($html);

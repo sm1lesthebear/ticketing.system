@@ -161,5 +161,5 @@ SQL;
     $Array = null;
     $oDBConnection->commitSQL($sSQL, $Array);
 }
-Echo "Your Job has been submitted. Your job number is: $sJobID";
+Echo "Your Job has been submitted. Your job number is: $sJobID, redirecting you now";
 header("refresh:3;url=dashboard.php");
