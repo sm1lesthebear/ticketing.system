@@ -30,7 +30,6 @@ class navbar_class_lib {
                                     <ul class="nav navbar-nav navbar-right">
                                         <li class=""><a href="./ticket_submit.php">Submit Ticket</a></li>
                                         <li class=""><a href="./dashboard.php">Dashboard</a></li>
-                                        <li class=""><a href="./reports.php">Reports</a></li>
                                         <li class=""><a href="./user_create_form.php">Create User (Admin only)</a></li>
                                         <li class=""><a href="./logout.php">Logout</a></li>
                                     </ul>

@@ -101,7 +101,7 @@ $html =<<<HTML
             <div id="margin-right-left">
                 <div class="row">
                     <div class="col-sm-10 col-sm-offset-1">
-                        <h1 class="h1-margin-bottom">Active Jobs of Agent $sAgentName</h1>
+                        <h1 class="h1-margin-bottom">Closed Jobs of Agent $sAgentName</h1>
                                 <table class="table">
                                 <!--generated table info-->
                                 <tr>
@@ -125,7 +125,7 @@ $html =<<<HTML
                                     </div>
                                 </form>
                             </div>
-                            <div class="col-sm-2">
+                            <div class="col-sm-4">
                                 <form class="form" action="ticket_submit.php" method="post">
                                     <div class="form-group">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
                                         <button class="form-control btn btn-default" name="kkk">Add Ticket</button>
@@ -133,16 +133,9 @@ $html =<<<HTML
                                 </form>
                             </div>
                             <div class="col-sm-4">
-                                <form class="form" action="dashboard_closed.php" method="post">
+                                <form class="form" action="dashboard.php" method="post">
                                     <div class="form-group">
-                                        <button class="form-control btn btn-default" name="closed">See Closed Tickets</button>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="col-sm-2">
-                                <form class="form" action="reports.php" method="post">
-                                    <div class="form-group">
-                                        <button class="form-control btn btn-default" name="kkk">See Reports</button>
+                                        <button class="form-control btn btn-default" name="closed">See Open Tickets</button>
                                     </div>
                                 </form>
                             </div>

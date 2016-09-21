@@ -122,7 +122,7 @@ $html =<<<HTML
                                     </div>
                                 </form>
                             </div>
-                            <div class="col-sm-2">
+                            <div class="col-sm-4">
                                 <form class="form" action="ticket_submit.php" method="post">
                                     <div class="form-group">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
                                         <button class="form-control btn btn-default" name="kkk">Add Ticket</button>
@@ -133,13 +133,6 @@ $html =<<<HTML
                                 <form class="form" action="dashboard_closed.php" method="post">
                                     <div class="form-group">
                                         <button class="form-control btn btn-default" name="closed">See Closed Tickets</button>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="col-sm-2">
-                                <form class="form" action="reports.php" method="post">
-                                    <div class="form-group">
-                                        <button class="form-control btn btn-default" name="kkk">See Reports</button>
                                     </div>
                                 </form>
                             </div>
