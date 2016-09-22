@@ -62,17 +62,15 @@ SQL;
 else
 {
         $sSQL = <<<SQL
-                select fld_id_job, fld_start_date, fld_title, fld_description, P.fld_priority 
+                select DISTINCT fld_id_job, fld_start_date, fld_title, fld_description, P.fld_priority 
                 from tbl_job J, tbl_priority P, tbl_agent_bridge AB 
                 where J.fld_fk_id_priority = P.fld_id_priority 
-                and J.fld_fk_id_status = 2 
-                or J.fld_fk_id_status = 3
-                and J.fld_id_job = AB.fld_fk_id_job
+                and (J.fld_fk_id_status = 2 
+                or J.fld_fk_id_status = 3)
                 and AB.fld_fk_id_agent = $sAgentID
                 order by P.fld_id_priority DESC
                 limit 15 offset $sLimitVal
 SQL;
-    echo $sSQL;
 }
 foreach ($oDBConnection->getfromDB($sSQL) as $row)
 {

@@ -3,8 +3,8 @@ require_once("CLASS_FILES/cPage_load.php");
 require_once("CLASS_FILES/cDatabase_Connection.php");
 require_once("CLASS_FILES/global_lib.php");
 $oLoginCheck = new cLogin_Test();
-//echo $oLoginCheck->checkLogin();
-//echo $oLoginCheck->checkPriv();
+echo $oLoginCheck->checkLogin();
+echo $oLoginCheck->checkPriv();
 
 $sPrivilige_ID = "";
 $sPrivilige_Title = "";

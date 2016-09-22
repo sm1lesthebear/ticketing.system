@@ -57,7 +57,7 @@ $html =<<<HTML
                 <div class="form-group" id="client_email">
                     <label class="col-sm-3" for="client_email">Client Email :</label>
                     <div class="col-sm-9">
-                        <input maxlength="30" type="email"  class="form-control" name="client_email" id="client_email" Placeholder="Enter the clients email...">
+                        <input maxlength="45" type="email"  class="form-control" name="client_email" id="client_email" Placeholder="Enter the clients email...">
                     </div>
                 </div>
                 <div class="form-group" id="client_phone_number">

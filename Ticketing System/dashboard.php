@@ -147,6 +147,7 @@ $html =<<<HTML
                             </div>
                         </div>
                     </div>
+                    <a href="Userguide\Ticket System User Guide.pdf" download> User Guide Download </a>
         </div>
 </div>
 HTML;
